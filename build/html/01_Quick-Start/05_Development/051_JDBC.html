@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>5.1. JDBC驱动应用示例 &mdash; GBase 8s数据库  文档</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
+
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/translations.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" />
+    <link rel="next" title="6. 导出导入工具" href="../06_Unload-Load/index.html" />
+    <link rel="prev" title="5. 应用程序开发" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            GBase 8s数据库
+          </a>
+              <div class="version">
+                v3.5.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">快速入门</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../01_Install/index.html">1. 安装部署</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../02_Init/index.html">2. 安装后初始环境</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../03_User/index.html">3. 数据库用户操作</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../04_Basic-Oprate/index.html">4. 基本操作</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">5. 应用程序开发</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">5.1. JDBC驱动应用示例</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../06_Unload-Load/index.html">6. 导出导入工具</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">GBase 8s数据库</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">快速入门</a></li>
+          <li class="breadcrumb-item"><a href="index.html"><span class="section-number">5. </span>应用程序开发</a></li>
+      <li class="breadcrumb-item active"><span class="section-number">5.1. </span>JDBC驱动应用示例</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="jdbc">
+<h1><span class="section-number">5.1. </span>JDBC驱动应用示例<a class="headerlink" href="#jdbc" title="此标题的永久链接"></a></h1>
+<p>本章将介绍GBase 8s的JDBC的基础的操作演示。</p>
+<section id="id1">
+<h2><span class="section-number">5.1.1. </span>示例环境介绍<a class="headerlink" href="#id1" title="此标题的永久链接"></a></h2>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>软件</th>
+<th>版本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>JDBC驱动</td>
+<td>gbasedbtjdbc_3.5.1.jar</td>
+</tr>
+<tr>
+<td>JDK</td>
+<td>1.8</td>
+</tr>
+</tbody>
+</table></section>
+<section id="id2">
+<h2><span class="section-number">5.1.2. </span>JDBC驱动下载<a class="headerlink" href="#id2" title="此标题的永久链接"></a></h2>
+<p>JDBC驱包的名称一般为：gbasedbtjdbc_3.5.1.jar<br />官方下载地址：<a class="reference external" href="https://www.gbase.cn/download/gbase-8s-1?category=DRIVER_PACKAGE">https://www.gbase.cn/download/gbase-8s-1?category=DRIVER_PACKAGE</a></p>
+</section>
+<section id="java">
+<h2><span class="section-number">5.1.3. </span>编写JAVA文件<a class="headerlink" href="#java" title="此标题的永久链接"></a></h2>
+<ul class="simple">
+<li><p>编写示例使用的java文件：JdbcSample.java</p></li>
+</ul>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">java.sql.*</span><span class="p">;</span>
+
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">JdbcSample</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">DRIVER_CLASSNAME</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;com.gbasedbt.jdbc.Driver&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">DRIVER_URL</span><span class="o">=</span><span class="s">&quot;jdbc:gbasedbt-sqli://192.168.80.70:9088/testdb:GBASEDBTSERVER=gbase01;DB_LOCALE=zh_CN.utf8;CLIENT_LOCALE=zh_CN.utf8;IFX_LOCK_MODE_WAIT=10&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">DRIVER_USER</span><span class="o">=</span><span class="s">&quot;gbasedbt&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">DRIVER_PASS</span><span class="o">=</span><span class="s">&quot;GBase123$%&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">ClassNotFoundException</span><span class="p">,</span><span class="w"> </span><span class="n">SQLException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+<span class="w">        </span><span class="n">PreparedStatement</span><span class="w"> </span><span class="n">preparedStatement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+<span class="w">        </span><span class="n">ResultSet</span><span class="w"> </span><span class="n">resultSet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+<span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">sqlstr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">;</span>
+
+<span class="w">        </span><span class="n">Class</span><span class="p">.</span><span class="na">forName</span><span class="p">(</span><span class="n">DRIVER_CLASSNAME</span><span class="p">);</span>
+<span class="w">        </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DriverManager</span><span class="p">.</span><span class="na">getConnection</span><span class="p">(</span><span class="n">DRIVER_URL</span><span class="p">,</span><span class="n">DRIVER_USER</span><span class="p">,</span><span class="n">DRIVER_PASS</span><span class="p">);</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Connection succeed!&quot;</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">sqlstr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;drop table if exists company&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="n">preparedStatement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">prepareStatement</span><span class="p">(</span><span class="n">sqlstr</span><span class="p">);</span>
+<span class="w">        </span><span class="n">preparedStatement</span><span class="p">.</span><span class="na">executeUpdate</span><span class="p">();</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;drop table company succeed!&quot;</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">sqlstr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;create table company(coid serial,coname varchar(255),coaddr varchar(255), primary key(coid))&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="n">preparedStatement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">prepareStatement</span><span class="p">(</span><span class="n">sqlstr</span><span class="p">);</span>
+<span class="w">        </span><span class="n">preparedStatement</span><span class="p">.</span><span class="na">executeUpdate</span><span class="p">();</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;create table company succeed!&quot;</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">sqlstr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;insert into company values(0,?,?),(0,?,?)&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="n">preparedStatement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">prepareStatement</span><span class="p">(</span><span class="n">sqlstr</span><span class="p">);</span>
+<span class="w">        </span><span class="n">preparedStatement</span><span class="p">.</span><span class="na">setString</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;GBase&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">preparedStatement</span><span class="p">.</span><span class="na">setString</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s">&quot;TJ&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">preparedStatement</span><span class="p">.</span><span class="na">setString</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="s">&quot;GBase BeiJing&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">preparedStatement</span><span class="p">.</span><span class="na">setString</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="s">&quot;BJ&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">preparedStatement</span><span class="p">.</span><span class="na">executeUpdate</span><span class="p">();</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;insert table company succeed!&quot;</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">sqlstr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;select * from company&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="n">preparedStatement</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">prepareStatement</span><span class="p">(</span><span class="n">sqlstr</span><span class="p">);</span>
+<span class="w">        </span><span class="n">resultSet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">preparedStatement</span><span class="p">.</span><span class="na">executeQuery</span><span class="p">();</span>
+<span class="w">        </span><span class="k">while</span><span class="p">(</span><span class="n">resultSet</span><span class="p">.</span><span class="na">next</span><span class="p">()){</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">resultSet</span><span class="p">.</span><span class="na">getObject</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;\t&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">resultSet</span><span class="p">.</span><span class="na">getObject</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&quot;\t&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">resultSet</span><span class="p">.</span><span class="na">getObject</span><span class="p">(</span><span class="mi">3</span><span class="p">));</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;select table company succeed!&quot;</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">resultSet</span><span class="p">.</span><span class="na">close</span><span class="p">();</span>
+<span class="w">        </span><span class="n">preparedStatement</span><span class="p">.</span><span class="na">close</span><span class="p">();</span>
+<span class="w">        </span><span class="n">connection</span><span class="p">.</span><span class="na">close</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>其中：</p>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th><strong>属性名称</strong></th>
+<th><strong>属性说明</strong></th>
+<th><strong>示例值</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DRIVER_CLASSNAME</td>
+<td>数据库驱动类名称</td>
+<td>com.gbasedbt.jdbc.Driver</td>
+</tr>
+<tr>
+<td>DRIVER_URL</td>
+<td>数据库连接字符串</td>
+<td>jdbc:gbasedbt-sqli://192.168.80.70:9088/testdb:GBASEDBTSERVER=gbase01;DB_LOCALE=zh_CN.utf8;CLIENT_LOCALE=zh_CN.utf8;IFX_LOCK_MODE_WAIT=10</td>
+</tr>
+<tr>
+<td>DRIVER_USER</td>
+<td>数据库连接用户</td>
+<td>gbasedbt</td>
+</tr>
+<tr>
+<td>DRIVER_PASS</td>
+<td>用户使用的密码</td>
+<td>GBase123$%</td>
+</tr>
+</tbody>
+</table><p>注：DRIVER_URL使用 安装部署 完成时的信息。</p>
+<ul class="simple">
+<li><p>编译JdbcSample.java</p></li>
+</ul>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>javac<span class="w"> </span>JdbcSample.java
+</pre></div>
+</div>
+<p>生成JdbcSample.classs</p>
+<ul class="simple">
+<li><p>JDBC测试</p></li>
+</ul>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[gbasedbt@node2 ~]$ java -cp .:gbasedbtjdbc_3.5.1.jar JdbcSample
+Connection succeed!
+drop table company succeed!
+create table company succeed!
+insert table company succeed!
+1       GBase   TJ
+2       GBase BeiJing   BJ
+select table company succeed!
+</pre></div>
+</div>
+<p>注：-cp 指定当前目录 . 和 gbasedbtjdbc_3.5.1.jar 为CLASSPATH</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="页脚">
+        <a href="index.html" class="btn btn-neutral float-left" title="5. 应用程序开发" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="../06_Unload-Load/index.html" class="btn btn-neutral float-right" title="6. 导出导入工具" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2025, gbasedbt.com.</p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
