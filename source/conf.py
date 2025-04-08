@@ -10,7 +10,6 @@
 project = 'GBase 8s数据库'
 copyright = '2025, gbasedbt.com'
 author = 'liaosnet'
-version = 'v3.5.1'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
