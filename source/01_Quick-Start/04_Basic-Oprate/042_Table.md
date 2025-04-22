@@ -17,9 +17,10 @@ CREATE TABLE company(
 ```sql
 SELECT *
 FROM systables
-WHERE tabid > 99
+WHERE tabid > 999
 AND tabtype = 'T';
 ```
+注：在3.6.x版本之后，系统表的tabid改为小于1000。  
 
 执行SELECT语句查看表中具体信息：  
 ```sql

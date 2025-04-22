@@ -15,8 +15,9 @@ CREATE INDEX ix_company_coname ON company(coname);
 ```sql
 SELECT *
 FROM sysindexes
-WHERE tabid > 99;
+WHERE tabid > 999;
 ```
+注：在3.6.x版本之后，系统表的tabid改为小于1000。  
 
 ## 删除索引  
 通过DROP INDEX语句删除索引  

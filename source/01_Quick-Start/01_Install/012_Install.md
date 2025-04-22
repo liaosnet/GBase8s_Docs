@@ -1,5 +1,5 @@
 # 产品安装  
-本章节将介绍Linux环境下单机方式的GBase 8s数据库服务端安装部署方式，请确保已根据安装前准备章节进行有关配置，本文以GBase8sV8.8_TL_3.5.1_x86.tar软件包为例进行阐述 。  
+本章节将介绍Linux环境下单机方式的GBase 8s数据库服务端安装部署方式，请确保已根据安装前准备章节进行有关配置，本文以GBase8sV8.8_TL_3.6.3_3X1_1_x86.tar软件包为例进行阐述 。  
 如需安装其他部署方式的GBase 8s数据库，请参考安装部署章节。  
 
 ## 创建安装目录  
@@ -10,21 +10,21 @@
 ```
 
 ## 上传软件包  
-将软件包GBase8sV8.8_TL_3.5.1_x86.tar和一键安装脚本AutoInit_GBase8s_v1.4.9.tar上传至install目录中，请确认软件包是以.tar为后缀，如果是.7z后缀，需要使用7zip工具先解压。  
-解压一键安装脚本AutoInit_GBase8s_v1.4.9.tar，并查看解压后目录中所有文件，请将解压命令后的脚本包名称更改为实际使用的脚本包名称：  
+将软件包GBase8sV8.8_TL_3.6.3_3X1_1_x86.tar和一键安装脚本AutoInit_GBase8s_v1.4.12.tar上传至install目录中，请确认软件包是以.tar为后缀，如果是.7z后缀，需要使用7zip工具先解压。  
+解压一键安装脚本AutoInit_GBase8s_v1.4.11.tar，并查看解压后目录中所有文件，请将解压命令后的脚本包名称更改为实际使用的脚本包名称：  
 ```text
-[root@node2 install]# tar -xf AutoInit_GBase8s_v1.4.9.tar
+[root@node2 install]# tar -xf AutoInit_GBase8s_v1.4.12.tar
 
 [root@node2 install]# ll
 总用量 338352
--rwxr-xr-x. 1 root root     19399 6月  11 12:43 AutoInit_GBase8s.sh
--rw-r--r--. 1 root root     40960 6月  12 15:30 AutoInit_GBase8s_v1.4.9.tar
--rwxr-xr-x. 1 root root      3104 3月  21 14:23 autoOptimize.sh
--rwxr-xr-x. 1 root root      2217 6月  11 12:39 CheckEnv.sh
--rwxr-xr-x. 1 root root      1484 6月  11 12:39 CleanAll.sh
--rw-r--r--. 1 root root 346388480 6月  18 17:16 GBase8sV8.8_TL_3.5.1_x86.tar
--rw-r--r--. 1 root root      1933 6月  11 12:45 HOW_TO_USE.txt
--rw-r--r--. 1 root root      2867 6月  11 12:38 README.txt
+-rwxr-xr-x. 1 root root     22445 4月  17 10:02 AutoInit_GBase8s.sh
+-rw-r--r--. 1 root root     51200 4月  17 12:12 AutoInit_GBase8s_v1.4.12.tar
+-rwxr-xr-x. 1 root root      3108 4月  17 10:02 autoOptimize.sh
+-rwxr-xr-x. 1 root root      3344 4月  17 10:02 CheckEnv.sh
+-rwxr-xr-x. 1 root root      1699 4月  17 10:02 CleanAll.sh
+-rw-r--r--. 1 root root 350638080 4月   7 09:15 GBase8sV8.8_TL_3.6.3_3X1_1_x86.tar
+-rw-r--r--. 1 root root      2027 6月  28 2024 HOW_TO_USE.txt
+-rw-r--r--. 1 root root      3440 4月  17 09:41 README.txt
 ```
 
 ## 执行安装部署  

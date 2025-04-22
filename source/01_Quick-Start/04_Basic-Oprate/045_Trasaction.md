@@ -28,8 +28,7 @@ COMMIT;
 SELECT * FROM tab1;
 ```
 
-结果：
-
+结果：  
 ```text
 |col1 |col2    |
 |-----|--------|
@@ -42,8 +41,7 @@ INSERT INTO tab1 values(2,'test002');
 SELECT * FROM tab1;
 ```
 
-结果：
-
+结果：  
 ```text
 |col1 |col2    |
 |-----|--------|
@@ -59,8 +57,7 @@ ROLLBACK;
 SELECT * FROM tab1;
 ```
 
-结果：
-
+结果：  
 ```text
 |col1 |col2    |
 |-----|--------|

@@ -5,12 +5,23 @@
 
 | 软件 | 版本 |
 | --- | --- |
-| JDBC驱动 | gbasedbtjdbc_3.5.1.jar |
+| JDBC驱动 | gbasedbtjdbc_3.6.3_2_561324.jar |
 | JDK | 1.8 |
 
 ## JDBC驱动下载  
-JDBC驱包的名称一般为：gbasedbtjdbc_3.5.1.jar  
+JDBC驱包的名称一般为：gbasedbtjdbc_3.6.3_2_561324.jar  
 官方下载地址：[https://www.gbase.cn/download/gbase-8s-1?category=DRIVER_PACKAGE](https://www.gbase.cn/download/gbase-8s-1?category=DRIVER_PACKAGE)  
+
+**或者**  
+从maven中央仓库拉取  
+```text
+<dependency>
+  <groupId>com.gbasedbt</groupId>
+  <artifactId>jdbc</artifactId>
+  <version>3.6.3.2</version>
+</dependency>
+```
+
 
 ## 编写JAVA文件  
 
@@ -90,7 +101,7 @@ javac JdbcSample.java
 - JDBC测试  
 
 ```text
-[gbasedbt@node2 ~]$ java -cp .:gbasedbtjdbc_3.5.1.jar JdbcSample
+[gbasedbt@node2 ~]$ java -cp .:gbasedbtjdbc_3.6.3_2_561324.jar JdbcSample
 Connection succeed!
 drop table company succeed!
 create table company succeed!
@@ -100,4 +111,4 @@ insert table company succeed!
 select table company succeed!
 ```
 
-注：-cp 指定当前目录 . 和 gbasedbtjdbc_3.5.1.jar 为CLASSPATH
+注：-cp 指定当前目录 . 和 gbasedbtjdbc_3.6.3_2_561324.jar 为CLASSPATH

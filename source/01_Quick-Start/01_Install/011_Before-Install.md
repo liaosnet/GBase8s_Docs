@@ -22,6 +22,16 @@
 ## 操作系统内核参数  
 下表为GBase 8s数据库所需的资源限制值的最小要求，请根据下表所示将资源限制值调整为大于或等于最小要求的值。  
 
+确认如下内核参数的值，需要更改/etc/sysctl.conf并使之生效  
+
+```text
+kernel.shmmax = 18446744073692774399
+kernel.shmall = 18446744073692774399
+kernel.shmmni = 4096
+kernel.sem = 32000 1024000000 32000 32000
+vm.swappiness = 0
+```
+
 | **参数值** | **资源项** | **描述** | **推荐值** |
 | --- | --- | --- | --- |
 | nofile | open files | 文件句柄 | 1048576 |
@@ -73,7 +83,32 @@ file locks                      (-x) unlimited
 EOF
 ```
 
+修改/etc/systemd/logind.conf配置文件，关闭RemoveIPC功能  
+```text
+# 去掉#号
+RemoveIPC=no
+```
+
+修改/usr/lib/systemd/system/systemd-logind.service配置文件，关闭RemoveIPC功能  
+```text
+# 增加或者修改为以下
+RemoveIPC=no
+```
+
+重启服务或重启操作系统   
+```shell
+systemctl daemon-reload 
+systemctl restart systemd-logind.service
+```
+
+结果验证确认   
+```shell
+loginctl show-session | grep RemoveIPC 
+systemctl show systemd-logind | grep RemoveIPC
+```
+
+
 ## 软件包准备  
-请联系技术支持或者直接从官网获取GBase 8s数据库软件包，软件包名称示例：GBase8sV8.8_TL_3.5.1_x86.tar，一键安装脚本名称示例：AutoInit_GBase8s_v1.4.9.tar  
+请联系技术支持或者直接从官网获取GBase 8s数据库软件包，软件包名称示例：GBase8sV8.8_TL_3.5.1_x86.tar，一键安装脚本名称示例：AutoInit_GBase8s_v1.4.11.tar  
 官网下载地址：[https://www.gbase.cn/download/gbase-8s-1?category=INSTALL_PACKAGE](https://www.gbase.cn/download/gbase-8s-1?category=INSTALL_PACKAGE)    
 一键安装脚本：[https://gbasedbt.com/dl/AutoInit_GBase8s/latest/](https://gbasedbt.com/dl/AutoInit_GBase8s/latest/)  

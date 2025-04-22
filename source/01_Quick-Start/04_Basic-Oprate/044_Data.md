@@ -32,6 +32,7 @@ SELECT * FROM company WHERE coid = 3;
 SELECT * FROM company;
 ```
 
+结果：  
 ```text
 |coid |coname  |coaddr  |
 |-----|--------|--------|
@@ -40,12 +41,14 @@ SELECT * FROM company;
 |3    |coname3 |coaddr3 |
 ```
 
+执行更新操作：  
 ```sql
 UPDATE company SET coname='co' WHERE coname='coname1';
 
 SELECT * FROM company;
 ```
 
+结果：  
 ```text
 |coid |coname  |coaddr  |
 |-----|--------|--------|
@@ -62,6 +65,7 @@ UPDATE company SET (coname,coaddr) = ('coname33','coaddr33') WHERE coid=3;
 SELECT * FROM  company;
 ```
 
+结果：  
 ```text
 |coid |coname   |coaddr   |
 |-----|---------|---------|
