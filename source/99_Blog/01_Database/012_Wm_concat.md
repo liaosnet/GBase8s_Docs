@@ -3,9 +3,9 @@
 ```sql
 DROP FUNCTION IF EXISTS wm_concat_ws_init;
 -- p_delimiter : delimiter, default ','
-CREATE dba FUNCTION  wm_concat_ws_init (p_dummy varchar(255), p_delimiter varchar(10) default ',')
+CREATE dba FUNCTION  wm_concat_ws_init (p_dummy varchar(255), p_delimiter varchar(9) default ',')
   RETURNING varchar(255) with (not variant);
-  -- length of delimident & delimident
+  -- length of delimident (<10 byte, use word) & delimident
   RETURN CHAR_LENGTH(p_delimiter) || p_delimiter;
 END FUNCTION;
 
@@ -14,9 +14,9 @@ DROP FUNCTION IF EXISTS wm_concat_ws_iter;
 -- p_next_value  : iter next value
 CREATE dba FUNCTION  wm_concat_ws_iter (p_iter_result varchar(255), p_next_value varchar(255))
   RETURNING varchar(255) with (not variant);
-  DEFINE v_del_str varchar(10);
+  DEFINE v_del_str varchar(9);
   DEFINE v_del_len smallint;
-  LET v_del_len = left(p_iter_result,1) + 0;
+  LET v_del_len = left(p_iter_result,1);
   LET v_del_str = substr(p_iter_result,2,v_del_len);
   RETURN p_iter_result || p_next_value || v_del_str;
 END FUNCTION;
