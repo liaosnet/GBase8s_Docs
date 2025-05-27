@@ -14,7 +14,7 @@
 | --- | --- |
 | 操作系统 | CentOS 7, Ubuntu 18.04.x LTS |
 | CPU架构 | x86_64, Arm64 |
-| 内存 | 2G |
+| 内存 | 2G，对于mvcc版本不少于4G |
 | 硬盘 | 40G |
 | 网络 | 以太网千兆 |
 
@@ -109,6 +109,6 @@ systemctl show systemd-logind | grep RemoveIPC
 
 
 ## 软件包准备  
-请联系技术支持或者直接从官网获取GBase 8s数据库软件包，软件包名称示例：GBase8sV8.8_TL_3.5.1_x86.tar，一键安装脚本名称示例：AutoInit_GBase8s_v1.4.11.tar  
+请联系技术支持或者直接从官网获取GBase 8s数据库软件包，软件包名称示例：GBase8sV8.8_TL_3.6.3_x86.tar，一键安装脚本名称示例：AutoInit_GBase8s_v1.4.13.tar  
 官网下载地址：[https://www.gbase.cn/download/gbase-8s-1?category=INSTALL_PACKAGE](https://www.gbase.cn/download/gbase-8s-1?category=INSTALL_PACKAGE)    
 一键安装脚本：[https://gbasedbt.com/dl/AutoInit_GBase8s/latest/](https://gbasedbt.com/dl/AutoInit_GBase8s/latest/)  

@@ -10,21 +10,22 @@
 ```
 
 ## 上传软件包  
-将软件包GBase8sV8.8_TL_3.6.3_3X1_1_x86.tar和一键安装脚本AutoInit_GBase8s_v1.4.12.tar上传至install目录中，请确认软件包是以.tar为后缀，如果是.7z后缀，需要使用7zip工具先解压。  
-解压一键安装脚本AutoInit_GBase8s_v1.4.11.tar，并查看解压后目录中所有文件，请将解压命令后的脚本包名称更改为实际使用的脚本包名称：  
+将软件包GBase8sV8.8_TL_3.6.3_3X1_1_x86.tar和一键安装脚本AutoInit_GBase8s_v1.4.13.tar上传至install目录中，请确认软件包是以.tar为后缀，如果是.7z后缀，需要使用7zip工具先解压。  
+解压一键安装脚本AutoInit_GBase8s_v1.4.13.tar，并查看解压后目录中所有文件，请将解压命令后的脚本包名称更改为实际使用的脚本包名称：  
 ```text
-[root@node2 install]# tar -xf AutoInit_GBase8s_v1.4.12.tar
+[root@node2 install]# tar -xf AutoInit_GBase8s_v1.4.13.tar
 
 [root@node2 install]# ll
 总用量 338352
--rwxr-xr-x. 1 root root     22445 4月  17 10:02 AutoInit_GBase8s.sh
--rw-r--r--. 1 root root     51200 4月  17 12:12 AutoInit_GBase8s_v1.4.12.tar
--rwxr-xr-x. 1 root root      3108 4月  17 10:02 autoOptimize.sh
--rwxr-xr-x. 1 root root      3344 4月  17 10:02 CheckEnv.sh
--rwxr-xr-x. 1 root root      1699 4月  17 10:02 CleanAll.sh
--rw-r--r--. 1 root root 350638080 4月   7 09:15 GBase8sV8.8_TL_3.6.3_3X1_1_x86.tar
--rw-r--r--. 1 root root      2027 6月  28 2024 HOW_TO_USE.txt
--rw-r--r--. 1 root root      3440 4月  17 09:41 README.txt
+-rwxr-xr-x. 1 root root     23073 5月  17 10:02 AutoInit_GBase8s.sh
+-rw-r--r--. 1 root root     51200 5月  17 12:12 AutoInit_GBase8s_v1.4.13.tar
+-rwxr-xr-x. 1 root root      3108 5月  17 10:02 autoOptimize.sh
+-rwxr-xr-x. 1 root root      3344 5月  17 10:02 CheckEnv.sh
+-rwxr-xr-x. 1 root root      1699 5月  17 10:02 CleanAll.sh
+-rw-r--r--. 1 root root 350638080 5月   7 09:15 GBase8sV8.8_TL_3.6.3_3X1_1_x86.tar
+-rw-r--r--. 1 root root      1736 4月  17 13:01 gbasedbt.service
+-rw-r--r--. 1 root root      2321 6月  28 2024 HOW_TO_USE.txt
+-rw-r--r--. 1 root root      3669 5月  17 09:41 README.txt
 ```
 
 ## 执行安装部署  
@@ -33,7 +34,8 @@
 [root@node2 install]# bash AutoInit_GBase8s.sh -h
 Usage:
     AutoInit_GBase8s.sh [-d path] [-i path] [-p path] [-s y|n] [-l locale] [-u user] [-o y|n]
-                            [-n servername] [-c num_of_cpu] [-m num_of_memory] [-t type_of_instance]
+                        [-n servername] [-c num_of_cpu] [-m num_of_memory] [-t type_of_instance]
+                        [-a y|n]
 
         -d path    The path of dbspace.
         -i path    The path of install software.
@@ -46,6 +48,7 @@ Usage:
         -c NUM     Number of CPU use.
         -m NUM     Number of MB Memory use.
         -t TYPE    Type of instance will install, [small], if use this, ignore -c and -m.
+        -a y|n     Security need, default N.
 ```
 
 使用按自动配置（使用1G的数据文件），过程中自动安装依赖包（有互联网连接）、软件安装、初始化实例。  

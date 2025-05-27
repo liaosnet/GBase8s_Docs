@@ -39,4 +39,4 @@ html_search_language = 'zh'
 html_show_sphinx = False
 html_show_sourcelink = False
 # html_theme_path = [sphinx_pdj_theme.get_html_theme_path()]
-html_theme_options = {'logo_only': True}
+# html_theme_options = {'logo_only': True}
