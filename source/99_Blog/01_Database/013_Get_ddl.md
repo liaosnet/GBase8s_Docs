@@ -12,6 +12,7 @@ drop PROCEDURE if exists get_ddl(varchar,varchar,varchar,smallint);
  * USAGE EG : get_dll('table', 'gbasedbt', 'Tab1', 1)
  * WRITE BY : liaosnet@gbasedbt.com 2024-10-21
  * UPDATE   : 2025-04-03 support DELIMIDENT
+ * UPDATE   ：2025-06-18 fix indexes oracle mode 201 error 
  *******************************************************************/
 create PROCEDURE get_ddl(p_type varchar(40), p_user varchar(32), p_name varchar(128), p_del smallint default 0)
 returning lvarchar(32000) as ddl;
@@ -122,7 +123,7 @@ case lower(p_type)
           from sysindexes si, systables st
          where si.tabid = st.tabid
            and st.tabname = v_tabname
-           and si.idxname[1,1] != ' '
+           -- and si.idxname[1,1] != ' '
 		   -- order by default
       call proc_idxsql(v_idx_name) returning v_idx_sqls;
       let v_ddl = v_ddl || v_idx_sqls || chr(10) ;
@@ -193,17 +194,8 @@ case lower(p_type)
 	if v_numtab = 0 then
 	  return null;
 	end if;
-    let v_idx_name = '';
-    foreach select si.idxname
-          into v_idx_name
-          from sysindexes si, systables st
-         where si.tabid = st.tabid
-           and st.tabname = v_tabname
-           and si.idxname[1,1] != ' '
-		   -- order by default
-      call proc_idxsql(v_idx_name,p_del) returning v_idx_sqls;
-      let v_ddl = v_ddl || v_idx_sqls || chr(10) ;
-    end foreach;
+    call proc_idxsql(v_tabname,p_del) returning v_idx_sqls;
+    let v_ddl = v_idx_sqls ;
 
   when 'view' then
     -- view
@@ -218,7 +210,7 @@ case lower(p_type)
                and t.tabtype = 'V'
                and t.tabname = v_tabname
              order by v.seqno
-      let v_ddl = v_ddl || v_view_text;
+      let v_ddl = v_view_text;
     end foreach;
 
   when 'procedure' then
@@ -234,7 +226,7 @@ case lower(p_type)
                and p.procname = v_tabname
                and b.datakey = 'T'
              order by b.seqno
-      let v_ddl = v_ddl || v_proc_text;
+      let v_ddl = v_proc_text;
     end foreach;
 
   when 'synonym' then 
@@ -264,10 +256,11 @@ end PROCEDURE;
  * DESCRIPTION: build index sql from idxname
  * USAGE: call proc_idxsql(idxname);
  * WRITE BY: liaosnet@gbasedbt.com 2023-12-19
- * UPDATE   : 2025-04-03 support DELIMIDENT
+ * UPDATE  : 2025-04-03 support DELIMIDENT
+ * UPDATE  : 2025-06-18 index name filter, skip pk.
  *****************************************************/
 DROP PROCEDURE IF EXISTS proc_idxsql(varchar,smallint);
-CREATE PROCEDURE proc_idxsql(p_idxname varchar(128), p_del smallint default 0) returning lvarchar(1024);
+CREATE PROCEDURE proc_idxsql(p_idxname varchar(128), p_del smallint default 0) returning lvarchar(1024) as idxsql;
   define v_idxsql lvarchar(1024);
   define v_idx_typename varchar(20);
   define v_tabid int;
@@ -290,12 +283,22 @@ CREATE PROCEDURE proc_idxsql(p_idxname varchar(128), p_del smallint default 0) r
   ON EXCEPTION
     RETURN NULL;
   END EXCEPTION;
-  
+--set debug file to '/home/gbase/spl.1';
+--trace on;  
+
+  -- primary key or constraints default name.
+  IF regexp_like(p_idxname,'^ [0-9]+_[0-9]+$') = 't' then
+    RETURN '';
+  END IF;
   -- GET INDEXKEYS
   SELECT t.tabid, t.tabname, i.owner,i.idxtype,clustered, i.indexkeys::lvarchar
   INTO v_tabid, v_tabname, v_idxowner, v_idxtype, v_idxcluster,v_idxkeys
   FROM sysindices i,systables t
   WHERE i.tabid = t.tabid AND i.idxname = p_idxname;
+  
+  IF v_tabname is null or v_tabname = '' then 
+    RETURN '';
+  END IF;
   
   let v_idx_typename = '';
   if v_idxtype = 'U' then
@@ -387,12 +390,12 @@ drop PROCEDURE if exists get_tableschema(varchar);
 /*******************************************************************
  * PROCEDURE: get_tableschema(tabname)
  * DESCRIPTION: get table schema 
- * USAGE EG : get_dll('table1')
+ * USAGE EG : get_tableschema('table1')
  * WRITE BY : liaosnet@gbasedbt.com 2025-05-27
  *******************************************************************/
 -- return colname,coltypename,nullable,pk,default,extra
 create PROCEDURE get_tableschema(p_name varchar(128))
-returning nvarchar(128) as filed,varchar(128) as type,varchar(10) as null,varchar(10) as key,varchar(255) as default,varchar(128) as extra;
+returning nvarchar(128) as field,varchar(128) as type,varchar(10) as null,varchar(10) as key,varchar(255) as default,varchar(128) as extra;
   define v_tabname varchar(128);
   define v_numtab int; 
   define v_tabid  int;
@@ -492,7 +495,7 @@ call get_tableschema('tab1');
 结果：  
 
 ```text
-filed |type          |null |key |default |extra |
+field |type          |null |key |default |extra |
 ------|--------------|-----|----|--------|------|
 col1  |INTEGER       |NO   |PRI |        |      |
 col2  |DECIMAL(10,2) |YES  |    |        |      |
@@ -503,7 +506,7 @@ col3  |DECIMAL(10)   |NO   |    |        |      |
 
 ```sql
 SELECT
-    tmp.colname AS filed,
+    tmp.colname AS field,
     CASE WHEN tmp.coltype_name IN ('DECIMAL','MONEY') THEN
             CASE WHEN mod(tmp.collength,256) = 255 THEN  tmp.coltype_name || '(' || (tmp.collength / 256)::int || ')' 
                  ELSE tmp.coltype_name || '(' || (tmp.collength / 256)::int || ',' || mod(tmp.collength,256) || ')' 
@@ -546,7 +549,7 @@ FROM (
 结果：  
 
 ```text
-filed |type          |null |key |default |extra |
+field |type          |null |key |default |extra |
 ------|--------------|-----|----|--------|------|
 col1  |INTEGER       |NO   |PRI |        |      |
 col2  |DECIMAL(10,2) |YES  |    |        |      |
@@ -554,3 +557,161 @@ col3  |DECIMAL(10)   |NO   |    |        |      |
 ```
 
 注意修改表名的位置。  
+
+
+## 通过存储过程获取表结构（类似oracle）  
+
+```sql
+drop PROCEDURE if exists get_tableschema(varchar);
+/*******************************************************************
+ * PROCEDURE: get_tablechema(tabname)
+ * DESCRIPTION: get table schema 
+ * USAGE EG : get_tablechema('tab1')
+ * WRITE BY : liaosnet@gbasedbt.com 2025-06-17
+ * UPDATE   : sysdefaultsexpr may has muti rows.  2025-06-18
+ *******************************************************************/
+-- columnName,dataType,dataLength,nullable,datadefault,dataScale,comments,isPrimaryKey
+create PROCEDURE get_tableschema(p_name varchar(128))
+returning nvarchar(128) as columnName,varchar(128) as dataType,int as dataLength,
+          char(1) as nullable, varchar(255) as datadefault,int as dataScale,
+          varchar(255) as comments, varchar(3) as isPrimaryKey, varchar(4000) as virtualcolumn;
+  define v_tabname varchar(128);
+  define v_numtab int; 
+  define v_tabid  int;
+  define v_colno  int;
+  define v_colname nvarchar(128);
+  define v_coltype_name varchar(128);
+  define v_isnullable char(1);
+  define v_isprimarykey varchar(3);
+  define v_defvalue varchar(255);
+  define v_collength int;
+  define v_decimal_p int;
+  define v_decimal_s int;
+  define v_comments varchar(255);
+  define v_coltype int;
+  define v_extended_id int;
+  define v_isvtcol char(1);
+  define v_vcolexpr varchar(4000);
+  define v_tmpcolexpr varchar(4000);
+
+  on exception
+    return ;
+  end exception;
+  
+  --set debug file to '/home/gbase/spl.log';
+  --trace on;
+  
+  let v_numtab = 0;
+  let v_tabname = p_name;
+  select count(*) into v_numtab 
+  from systables 
+  where tabname = v_tabname 
+  and tabtype = 'T';
+  if v_numtab = 0 then
+	return ;
+  end if;
+  
+  -- columnName, coltype_name, nullable, default_value, collength
+  foreach SELECT tmp.tabid,tmp.colno,tmp.colname,tmp.coltype_name,tmp.nullable,
+              tmp.collength,cc.comments,
+			  tmp.coltype,tmp.extended_id,tmp.isvtcol
+          INTO v_tabid,v_colno,v_colname,v_coltype_name,v_isnullable,v_collength,v_comments,v_coltype,v_extended_id,v_isvtcol
+          FROM (
+                SELECT ce.tabid, t.tabname, ce.colno, ce.colname,ce.coltype,ce.extended_id,ce.collength,ce.coltypename2::varchar(128) AS coltype_name,
+                CASE WHEN bitand(ce.coltype,256) = 256 THEN 'N' ELSE 'Y' END AS nullable,
+				CASE WHEN bitand(ce.colattr,768) = 768 THEN 'Y' ELSE 'N' END AS isvtcol
+                FROM syscolumnsext ce, systables t
+                WHERE ce.tabid = t.tabid
+                AND t.tabname = v_tabname
+                ORDER BY ce.colno
+            ) tmp left join syscolcomments cc on (tmp.tabname = cc.tabname and tmp.colname = cc.colname)
+
+      -- no column found, return null
+      if v_colname is null or v_colname = '' then
+        return ;
+      end if;
+	  
+	  -- default value 
+	  SELECT CASE d.type
+               WHEN 'L' THEN get_default_value(v_coltype, v_extended_id, v_collength, d.default::lvarchar(256))::VARCHAR(254)
+               WHEN 'C' THEN 'current year to second'::VARCHAR(254)
+               WHEN 'S' THEN 'dbservername'::VARCHAR(254)
+               WHEN 'U' THEN 'user'::VARCHAR(254)
+               WHEN 'T' THEN 'today'::VARCHAR(254)
+               WHEN 'E' THEN de.default::VARCHAR(254)
+               ELSE          NULL::VARCHAR(254)
+             END AS def_value
+	  INTO v_defvalue
+	  FROM sysdefaults d 
+	  LEFT JOIN sysdefaultsexpr de ON (d.tabid = de.tabid AND d.colno = de.colno AND de.type = 'T')
+	  WHERE de.tabid = v_tabid
+	  AND de.colno = v_colno;
+	  
+	  -- virtual column
+	  let v_vcolexpr = '';
+	  if v_isvtcol = 'Y' then     
+	    foreach SELECT de.default 
+		        INTO v_tmpcolexpr
+		        FROM sysdefaultsexpr de 
+				WHERE de.tabid = v_tabid AND de.colno = v_colno AND de.type = 'T'
+		  let v_vcolexpr = v_vcolexpr || v_tmpcolexpr;
+		end foreach;
+	  end if;
+
+      -- data_type
+      let v_decimal_p = 0;
+      let v_decimal_s = 0;
+      if v_coltype_name like '%CHAR%' then
+        let v_coltype_name = regexp_substr(v_coltype_name,'[^(]+',1);
+        let v_decimal_p = mod(v_collength,65536);
+        let v_decimal_s = v_collength / 65536;
+        let v_collength = v_decimal_p;
+      end if;
+      
+      -- decimal type 
+      IF v_coltype_name in ('DECIMAL','MONEY') THEN
+        let v_decimal_p = v_collength / 256;
+        let v_decimal_s = mod(v_collength,256);
+        if v_decimal_s = 255 then
+          let v_decimal_s = 0;
+        end if;
+        let v_collength = v_decimal_p;
+      END IF;
+	        
+      -- primary key
+      let v_isprimarykey = '';
+      SELECT 'YES' INTO v_isprimarykey
+      FROM sysconstraints so, sysindexes si
+      WHERE so.tabid = v_tabid
+      AND so.constrtype = 'P'
+      AND so.idxname = si.idxname
+      AND (si.part1 = v_colno OR si.part2 = v_colno OR si.part3 = v_colno OR si.part4 = v_colno
+        OR si.part5 = v_colno OR si.part6 = v_colno OR si.part7 = v_colno OR si.part7 = v_colno
+        OR si.part8 = v_colno OR si.part10 = v_colno OR si.part11 = v_colno OR si.part12 = v_colno
+        OR si.part13 = v_colno OR si.part14 = v_colno OR si.part15 = v_colno OR si.part16 = v_colno
+      );
+      if v_isprimarykey is null or v_isprimarykey = '' then 
+        let v_isprimarykey = 'NO';
+      end if;
+  
+      RETURN v_colname,v_coltype_name,v_collength,v_isnullable,v_defvalue,v_decimal_s,v_comments,v_isprimarykey,v_vcolexpr WITH resume;
+  end foreach;
+end PROCEDURE;
+```
+
+使用方法：  
+
+```sql
+-- call get_tableschema(表名);
+call get_tableschema('tab1');
+```
+
+结果：  
+
+```text
+columnname |datatype |datalength |nullable |datadefault  |datascale |comments       |isprimarykey |virtualcolumn |
+-----------|---------|-----------|---------|-------------|----------|---------------|-------------|--------------|
+col1       |INTEGER  |4          |N        |             |0         |主键           |YES          |              |
+col2       |DECIMAL  |10         |Y        |3.14         |2         |字段2含默认值  |NO           |              |
+col3       |DECIMAL  |10         |Y        |             |0         |字段3          |NO           |              |
+```

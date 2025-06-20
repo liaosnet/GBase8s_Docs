@@ -8,7 +8,7 @@
 # import sphinx_pdj_theme
 
 project = 'GBase 8s数据库 文档'
-copyright = '2025, GBASEDBT.COM'
+copyright = '2004 - 2025, GBASEDBT.COM'
 author = 'liaosnet'
 
 # -- General configuration ---------------------------------------------------
@@ -28,6 +28,14 @@ exclude_patterns = []
 
 language = 'zh_CN'
 
+autosectionlabel_prefix_document = True
+
+source_suffix = {
+    '.rst': 'restructuredtext',
+    '.md': 'markdown',
+    '.txt': 'markdown',
+}
+
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
@@ -40,3 +48,6 @@ html_show_sphinx = False
 html_show_sourcelink = False
 # html_theme_path = [sphinx_pdj_theme.get_html_theme_path()]
 # html_theme_options = {'logo_only': True}
+# need cp style.css to _static. 
+html_static_path = ['_static']
+html_css_files = ['style.css']

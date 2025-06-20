@@ -1,0 +1,48 @@
+/* modify the page width */
+.wy-nav-content {
+    max-width: 100% !important;
+}
+
+/* Download PDF position */
+footer .footer {
+    float: right
+}
+
+/* override table width restrictions */
+@media screen and (min-width: 767px) {
+
+    .wy-table-responsive table td {
+        /* !important prevents the common CSS stylesheets from overriding
+          this as on RTD they are loaded after this stylesheet */
+        white-space: normal !important;
+    }
+
+    .wy-table-responsive {
+        overflow: visible !important;
+    }
+}
+
+.wy-side-nav-search {
+    background-color: #b00000 !important;
+}
+
+
+/* For space between the return type and function name */
+a.internal+code.descname::before {
+    content: ' ';
+}
+
+/* For space between the arguments of the function */
+a.internal+em::before {
+    content: ' ';
+}
+
+.tool-sha256 {
+    word-break: break-all;
+}
+
+/* Fix extra space in nested toctrees */
+.toctree-wrapper ul li>* {
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}

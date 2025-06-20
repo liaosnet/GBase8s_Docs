@@ -91,7 +91,7 @@ fi
 ```
 
 ## systemd服务  
-gbase_backup.service 备份service  
+`gbase_backup.service` 备份service  
 
 ```text
 [Unit]
@@ -119,7 +119,7 @@ ExecStart=/opt/gbase/script/backup.sh
 WantedBy=multi-user.target
 ```
 
-gbase_backup.timer 定时器  
+`gbase_backup.timer` 定时器  
 
 ```text
 [Unit]

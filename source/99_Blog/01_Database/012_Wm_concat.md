@@ -1,5 +1,7 @@
 # wm_concat兼容函数存储过程写法  
+
 带分隔符写法(分隔符少于10个字节)  
+
 ```sql
 DROP FUNCTION IF EXISTS wm_concat_ws_init;
 -- p_delimiter : delimiter, default ','
@@ -57,7 +59,9 @@ create aggregate wm_concat_ws with
   FINAL = wm_concat_ws_final
 );
 ```
+
 示例：  
+
 ```sql
 SELECT col1,wm_concat_ws(col2,'###')
 FROM tab11

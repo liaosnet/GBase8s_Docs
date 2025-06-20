@@ -8,7 +8,7 @@
 - `importdb.sh $dbname`  
 
 ## 脚本 
-exportdb.sh内容  
+`exportdb.sh`内容  
 
 ```shell
 #!/bin/bash
