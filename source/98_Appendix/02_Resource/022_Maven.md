@@ -6,12 +6,13 @@
 <dependency>
     <groupId>com.gbasedbt</groupId>
     <artifactId>jdbc</artifactId>
-    <version>3.6.3.2</version>
+    <version>3.6.3.32</version>
 </dependency>
 ```
 
 |**版本**|**版本号**|**对应JDBC版本**|**对应数据库版本说明**|  
 |:---|:---|:---|:---|
+|3.6.x|3.6.3.32|3.6.3_3X2_1_377ee9|v8.8 3.6.3_3x2_1|
 |3.6.x|3.6.3.2|3.6.3_2_561324|v8.8 3.6.3_2|
 |3.6.x|3.6.2.2|3.6.2_2_feafb2|v8.8 3.6.2_2|  
 |3.6.x|3.6.1.2|3.6.1_2|v8.8 3.6.1_2|  
