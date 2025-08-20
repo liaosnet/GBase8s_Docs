@@ -13,6 +13,7 @@ drop PROCEDURE if exists get_ddl(varchar,varchar,varchar,smallint);
  * WRITE BY : liaosnet@gbasedbt.com 2024-10-21
  * UPDATE   : 2025-04-03 support DELIMIDENT
  * UPDATE   ：2025-06-18 fix indexes oracle mode 201 error 
+ * UPDATE   ：2025-08-04 syscolcomments my has muti rows.
  *******************************************************************/
 create PROCEDURE get_ddl(p_type varchar(40), p_user varchar(32), p_name varchar(128), p_del smallint default 0)
 returning lvarchar(32000) as ddl;
@@ -34,8 +35,12 @@ returning lvarchar(32000) as ddl;
   define v_idx_sqls lvarchar(2048);
   define v_view_text nchar(256);
   define v_proc_text nchar(256);
-  define v_comments varchar(255);
+  define v_comments nvarchar(2048);
+  define v_tmpcomments nvarchar(512);
   define v_synonym_tabname varchar(128);
+  define v_tmpsegno varchar(128);
+  define v_curcolname varchar(128);
+  define v_tmpcolname varchar(128);
 
   on exception
     return null;
@@ -168,25 +173,87 @@ case lower(p_type)
     end if;
 
     -- has syscomments table, version 2.0 and older has not comments.  2024-09-13
-    select tabname 
-	into v_comments 
-	from systables 
-	where tabname = 'syscomments';
-	if v_comments = 'syscomments' then 
-      -- comment table;
-  	  foreach select replace(comments, chr(39), '''''') into v_comments
-  	         from syscomments
-  			 where tabname = v_tabname
-  	    let v_ddl = v_ddl || 'COMMENT ON TABLE ' || case when p_del = 1 and regexp_like(v_tabname,'^[a-z_][a-z0-9_]*$') = 'f' then chr(34) || v_tabname || chr(34) else v_tabname end || ' IS ''' || v_comments || ''';' || chr(10);
-  	  end foreach;
-  	
-  	  -- comment column;
-  	  foreach select colname,replace(comments, chr(39), '''''') into v_colname, v_comments
-  	          from syscolcomments
-  			 where tabname = v_tabname
-        let v_ddl = v_ddl || 'COMMENT ON COLUMN ' || case when p_del = 1 and regexp_like(v_tabname,'^[a-z_][a-z0-9_]*$') = 'f' then chr(34) || v_tabname || chr(34) else v_tabname end || '.' || case when p_del = 1 and regexp_like(v_colname,'^[a-z_][a-z0-9_]*$') = 'f' then chr(34) || v_colname || chr(34) else v_colname end || ' IS ''' || v_comments || ''';' || chr(10);
-  	  end foreach;
-    end if;
+    select t.tabname 
+	into v_tmpcomments 
+	from systables t 
+	where t.tabname = 'syscomments';
+    if v_tmpcomments = 'syscomments' then 
+	  -- table comments
+	  -- v3.6.3 has segno
+	  SELECT c.colname 
+      INTO v_tmpsegno
+      FROM syscolumns c, systables t 
+      WHERE c.tabid = t.tabid
+      AND t.tabname = 'syscolcomms'
+      AND c.colname = 'segno';
+	  let v_comments = '';
+	  if v_tmpsegno = 'segno' then
+	    foreach select replace(c.comments, chr(39),'''''')
+                  into v_tmpcomments
+		          from syscomms c, systables t
+				  where c.tabid = t.tabid
+				    and t.tabname =v_tabname
+				  order by c.segno
+          let v_comments = v_comments || v_tmpcomments;
+		end foreach;
+	  else 
+	    foreach select replace(c.comments, chr(39),'''''')
+                  into v_tmpcomments
+		          from syscomms c, systables t
+				  where c.tabid = t.tabid
+				    and t.tabname =v_tabname
+          let v_comments = v_comments || v_tmpcomments;
+		end foreach;
+	  end if;
+      if v_comments != '' then
+        let v_ddl = v_ddl || 'COMMENT ON TABLE ' || case when p_del = 1 and regexp_like(v_tabname,'^[a-z_][a-z0-9_]*$') = 'f' then chr(34) || v_tabname || chr(34) else v_tabname end || ' IS ''' || rtrim(v_comments) || ''';' || chr(10);
+	  end if;
+
+      -- column comments
+	  let v_comments = '';
+      let v_curcolname = '';
+	  if v_tmpsegno = 'segno' then
+	    foreach select c.colname,replace(cc.comments, chr(39),'''''')
+		          into v_tmpcolname, v_tmpcomments
+				  from syscolcomms cc, syscolumns c, systables t
+				  where cc.tabid = t.tabid
+				    and cc.colno = c.colno
+					and cc.tabid = c.tabid
+					and t.tabname = v_tabname
+				  order by cc.colno,cc.segno
+		  if v_curcolname = v_tmpcolname then
+		    let v_comments = v_comments || v_tmpcomments;
+		  else
+			if v_comments != '' then 
+			  let v_ddl = v_ddl || 'COMMENT ON COLUMN ' || case when p_del = 1 and regexp_like(v_tabname,'^[a-z_][a-z0-9_]*$') = 'f' then chr(34) || v_tabname || chr(34) else v_tabname end || '.' || case when p_del = 1 and regexp_like(v_curcolname,'^[a-z_][a-z0-9_]*$') = 'f' then chr(34) || v_curcolname || chr(34) else v_curcolname end || ' IS ''' || rtrim(v_comments) || ''';' || chr(10);
+			end if;
+            let v_curcolname = v_tmpcolname;
+			let v_comments = v_tmpcomments;
+          end if;		  
+		end foreach;
+        let v_ddl = v_ddl || 'COMMENT ON COLUMN ' || case when p_del = 1 and regexp_like(v_tabname,'^[a-z_][a-z0-9_]*$') = 'f' then chr(34) || v_tabname || chr(34) else v_tabname end || '.' || case when p_del = 1 and regexp_like(v_curcolname,'^[a-z_][a-z0-9_]*$') = 'f' then chr(34) || v_curcolname || chr(34) else v_curcolname end || ' IS ''' || rtrim(v_comments) || ''';' || chr(10);		
+	  else
+	    foreach select c.colname,replace(cc.comments, chr(39),'''''')
+		          into v_tmpcolname, v_tmpcomments
+				  from syscolcomms cc, syscolumns c, systables t
+				  where cc.tabid = t.tabid
+				    and cc.colno = c.colno
+					and cc.tabid = c.tabid
+					and t.tabname = v_tabname
+				  order by cc.colno
+		  if v_curcolname = v_tmpcolname then
+		    let v_comments = v_comments || v_tmpcomments;
+		  else
+			if v_comments != '' then 
+			  let v_ddl = v_ddl || 'COMMENT ON COLUMN ' || case when p_del = 1 and regexp_like(v_tabname,'^[a-z_][a-z0-9_]*$') = 'f' then chr(34) || v_tabname || chr(34) else v_tabname end || '.' || case when p_del = 1 and regexp_like(v_curcolname,'^[a-z_][a-z0-9_]*$') = 'f' then chr(34) || v_curcolname || chr(34) else v_curcolname end || ' IS ''' || rtrim(v_comments) || ''';' || chr(10);
+			end if;
+            let v_curcolname = v_tmpcolname;
+			let v_comments = v_tmpcomments;
+          end if;		  
+		end foreach;
+        let v_ddl = v_ddl || 'COMMENT ON COLUMN ' || case when p_del = 1 and regexp_like(v_tabname,'^[a-z_][a-z0-9_]*$') = 'f' then chr(34) || v_tabname || chr(34) else v_tabname end || '.' || case when p_del = 1 and regexp_like(v_curcolname,'^[a-z_][a-z0-9_]*$') = 'f' then chr(34) || v_curcolname || chr(34) else v_curcolname end || ' IS ''' || rtrim(v_comments) || ''';' || chr(10);		  
+	  end if;
+	end if;
 
   when 'indexes' then
     -- indexes, from proc_idxsql(idxname,del)
@@ -569,12 +636,13 @@ drop PROCEDURE if exists get_tableschema(varchar);
  * USAGE EG : get_tablechema('tab1')
  * WRITE BY : liaosnet@gbasedbt.com 2025-06-17
  * UPDATE   : sysdefaultsexpr may has muti rows.  2025-06-18
+ * UPDATE   : syscolcomments my has muti rows.    2025-08-04
  *******************************************************************/
 -- columnName,dataType,dataLength,nullable,datadefault,dataScale,comments,isPrimaryKey
 create PROCEDURE get_tableschema(p_name varchar(128))
 returning nvarchar(128) as columnName,varchar(128) as dataType,int as dataLength,
           char(1) as nullable, varchar(255) as datadefault,int as dataScale,
-          varchar(255) as comments, varchar(3) as isPrimaryKey, varchar(4000) as virtualcolumn;
+          nvarchar(2048) as comments, varchar(3) as isPrimaryKey, varchar(4000) as virtualcolumn;
   define v_tabname varchar(128);
   define v_numtab int; 
   define v_tabid  int;
@@ -587,7 +655,8 @@ returning nvarchar(128) as columnName,varchar(128) as dataType,int as dataLength
   define v_collength int;
   define v_decimal_p int;
   define v_decimal_s int;
-  define v_comments varchar(255);
+  define v_comments nvarchar(2048);
+  define v_tmpcomments nvarchar(512);
   define v_coltype int;
   define v_extended_id int;
   define v_isvtcol char(1);
@@ -613,9 +682,9 @@ returning nvarchar(128) as columnName,varchar(128) as dataType,int as dataLength
   
   -- columnName, coltype_name, nullable, default_value, collength
   foreach SELECT tmp.tabid,tmp.colno,tmp.colname,tmp.coltype_name,tmp.nullable,
-              tmp.collength,cc.comments,
+              tmp.collength,
 			  tmp.coltype,tmp.extended_id,tmp.isvtcol
-          INTO v_tabid,v_colno,v_colname,v_coltype_name,v_isnullable,v_collength,v_comments,v_coltype,v_extended_id,v_isvtcol
+          INTO v_tabid,v_colno,v_colname,v_coltype_name,v_isnullable,v_collength,v_coltype,v_extended_id,v_isvtcol
           FROM (
                 SELECT ce.tabid, t.tabname, ce.colno, ce.colname,ce.coltype,ce.extended_id,ce.collength,ce.coltypename2::varchar(128) AS coltype_name,
                 CASE WHEN bitand(ce.coltype,256) = 256 THEN 'N' ELSE 'Y' END AS nullable,
@@ -624,11 +693,40 @@ returning nvarchar(128) as columnName,varchar(128) as dataType,int as dataLength
                 WHERE ce.tabid = t.tabid
                 AND t.tabname = v_tabname
                 ORDER BY ce.colno
-            ) tmp left join syscolcomments cc on (tmp.tabname = cc.tabname and tmp.colname = cc.colname)
+            ) tmp
 
       -- no column found, return null
       if v_colname is null or v_colname = '' then
         return ;
+      end if;
+	  
+	  -- comments, has segno or not
+      SELECT c.colname 
+      INTO v_tmpcomments
+      FROM syscolumns c, systables t 
+      WHERE c.tabid = t.tabid
+      AND t.tabname = 'syscolcomms'
+      AND c.colname = 'segno';
+
+      let v_comments = '';
+      if v_tmpcomments = 'segno' then
+	    foreach SELECT cc.comments
+	            INTO v_tmpcomments
+	            FROM syscolcomms cc 
+	            WHERE cc.tabid = v_tabid AND cc.colno = v_colno
+	            ORDER BY cc.segno			  
+	        let v_comments = v_comments || v_tmpcomments;
+	    end foreach;	  
+      else   -- no segno
+        foreach SELECT cc.comments
+	            INTO v_tmpcomments
+	            FROM syscolcomms cc 
+	            WHERE cc.tabid = v_tabid AND cc.colno = v_colno		  
+	        let v_comments = v_comments || v_tmpcomments;
+	    end foreach;
+      end if;
+      if v_comments = '' then
+        let v_comments = null;
       end if;
 	  
 	  -- default value 

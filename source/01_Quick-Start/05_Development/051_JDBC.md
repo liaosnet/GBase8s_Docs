@@ -5,11 +5,11 @@
 
 | 软件 | 版本 |
 | --- | --- |
-| JDBC驱动 | gbasedbtjdbc_3.6.3_2_561324.jar |
+| JDBC驱动 | gbasedbtjdbc_3.6.3_3X2_1_377ee9 |
 | JDK | 1.8 |
 
 ## JDBC驱动下载  
-JDBC驱包的名称一般为：gbasedbtjdbc_3.6.3_2_561324.jar  
+JDBC驱包的名称一般为：gbasedbtjdbc_3.6.3_3X2_1_377ee9.jar  
 官方下载地址：[https://www.gbase.cn/download/gbase-8s-1?category=DRIVER_PACKAGE](https://www.gbase.cn/download/gbase-8s-1?category=DRIVER_PACKAGE)  
 
 **或者**  
@@ -18,7 +18,7 @@ JDBC驱包的名称一般为：gbasedbtjdbc_3.6.3_2_561324.jar
 <dependency>
   <groupId>com.gbasedbt</groupId>
   <artifactId>jdbc</artifactId>
-  <version>3.6.3.2</version>
+  <version>3.6.3.32</version>
 </dependency>
 ```
 
@@ -101,7 +101,7 @@ javac JdbcSample.java
 - JDBC测试  
 
 ```text
-[gbasedbt@node2 ~]$ java -cp .:gbasedbtjdbc_3.6.3_2_561324.jar JdbcSample
+[gbasedbt@node2 ~]$ java -cp .:gbasedbtjdbc_3.6.3_3X2_1_377ee9 JdbcSample
 Connection succeed!
 drop table company succeed!
 create table company succeed!
@@ -111,4 +111,4 @@ insert table company succeed!
 select table company succeed!
 ```
 
-注：-cp 指定当前目录 . 和 gbasedbtjdbc_3.6.3_2_561324.jar 为CLASSPATH
+注：-cp 指定当前目录 . 和 gbasedbtjdbc_3.6.3_3X2_1_377ee9 为CLASSPATH  
