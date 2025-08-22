@@ -38,3 +38,5 @@ GSDK可使用任意用户进行安装。
 export GSDK_PATH=/opt/GSDK
 export LD_LIBRARY_PATH=${GSDK_PATH}/lib:$LD_LIBRARY_PATH
 ```
+
+最后更新日期：2025-08-20  

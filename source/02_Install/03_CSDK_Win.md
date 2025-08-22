@@ -30,7 +30,7 @@ CSDK安装包解压，以管理员身份运行installclientsdk.exe开始安装�
 CLIENT_LOCALE：zh_CN.utf8  
 DB_LOCALE：zh_CN.utf8  
 GBASEDBTSERVER：gbase01  
-GBASEDBTDIR: D:\GBASE\GBase Client-SDK
+GBASEDBTDIR: D:\GBASE\GBase Client-SDK  
 GL_USEGLU：1  
 等参数。  
 ![环境配置](../_static/02_Install/03_CSDK_Win/csdk_win_07.png "环境配置")  
@@ -49,17 +49,19 @@ Service Name：13633         数据库使用的端口号
 在开始菜单里找到GBase Client-SDK 4.10(64-bit)目录，使用 管理员权限运行 ConnectTest Demo进行连接测试  
 ![测试数据库连接](../_static/02_Install/03_CSDK_Win/csdk_win_10.png "测试数据库连接")  
 
-出现的ConnectTest Demo界面下，会自动加载配置好的数据库服务器信息，选择Database（这里我们使用testdb），填写测试语句select * from systables进行测试，能获取到数据即为成功。  
+出现的ConnectTest Demo界面下，会自动加载配置好的数据库服务器信息，  
+选择Database（这里我们使用testdb），  
+填写测试语句select * from systables进行测试，能获取到数据即为成功。  
  
 ## ODBC的配置  
 安装了64位的CSDK，则需要配置64位的数据源。在 控制面板 – 所有控制面板项 – 管理工具 中配置 数据源（ODBC）开启ODBC配置，添加 用户或者系统DSN  
-![数据源](../_static/02_Install/03_CSDK_Win/csdk_win_11.png "数据源")    
+![数据源](../_static/02_Install/03_CSDK_Win/csdk_win_11.png "数据源")  
 
 使用GBase ODBC DRIVER (64-bit) 驱动  
-![创建数据源](../_static/02_Install/03_CSDK_Win/csdk_win_12.png "创建数据源")    
+![创建数据源](../_static/02_Install/03_CSDK_Win/csdk_win_12.png "创建数据源")  
  
 在通用（General）选项卡中，填写数据源名称：testdb  
-![创建数据源](../_static/02_Install/03_CSDK_Win/csdk_win_13.png "创建数据源")    
+![创建数据源](../_static/02_Install/03_CSDK_Win/csdk_win_13.png "创建数据源")  
  
 在连接（Connection）选项卡中，会读到现有的CSDK连接信息，只需选择相应的DataBase Name，我们这里使用testdb  
 ![连接](../_static/02_Install/03_CSDK_Win/csdk_win_14.png "连接")    
