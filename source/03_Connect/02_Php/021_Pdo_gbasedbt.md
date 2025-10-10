@@ -210,7 +210,8 @@ extension=pdo_gbasedbt.so
     header('Content-type:text/html;charset=utf-8');
     # 按实际修改地址、端口、用户及密码
     $dbh = new PDO("gbasedbt:HOST=192.168.0.212;SERV=13633;PROT=onsoctcp;SRVR=gbase01;DB=testdb;DLOC=zh_CN.utf8;CLOC=zh_CN.utf8","gbasedbt","GBase123$%");
-    # 指定数据库连接指令
+    # 指定数据库连接指令，PDO::CASE_NATURAL 自然（保留驱动返回的列名），默认是PDO::CASE_UPPER（强制列名大写）
+    $dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
 
     echo "初始化表 tabpdogbasedbt<br>" . "\n";
     echo "drop table tabpdogbasedbt<br>" . "\n";
@@ -237,7 +238,7 @@ extension=pdo_gbasedbt.so
     echo "<th>col2</th></tr>";
 
     foreach($rows as $row) {
-        # 需要使用大写字段名称
+        # 需要使用大写字段名称（依据 PDO::ATTR_CASE）
         echo "<tr><td>$row[0]</td>";
         echo "<td>$row[COL2]</td></tr>" . "\n";
     }

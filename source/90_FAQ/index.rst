@@ -1,4 +1,4 @@
-日志记录-数据库
+FAQ
 ================================
 .. meta::
    :description lang=cn:
@@ -7,11 +7,10 @@
       GBase,GBasedbt,GBase 8s,信创,国产数据库,国产,GBase 8t,8t,8s,oracle,informix数据库,oracle数据库,数据库,postgres,pg,mysql,mariadb,linux,shell,java,php,liaosnet,python,存储过程,函数,技术文档
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
+   :numbered:
    :titlesonly:
    
-   011_FirstRow
-   012_Wm_concat
-   013_Get_ddl
-   014_SQLAlchemy
-
+   01_History
+   02_FAQ
+   21_SQLS

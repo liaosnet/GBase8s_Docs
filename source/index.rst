@@ -15,5 +15,6 @@ GBase 8s 数据库
    02_Install/index
    03_Connect/index
    04_DevRef/index
+   90_FAQ/index
    98_Appendix/index
    99_Blog/index
