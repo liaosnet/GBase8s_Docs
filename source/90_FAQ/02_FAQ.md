@@ -424,4 +424,131 @@ PDO_GBASEDBT 默认返回的元数据为大写，连接的属性上增加
 $dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
 ```
 
-最后更新日期：2025-10-10  
+-----  
+
+## 使用druid时，数据库内存不断增加  
+数据库版本：ALL  
+操作系统：ALL  
+硬件平台：ALL  
+**描述：**  
+使用druid连接池时，数据库内存不断增加  
+**解决方法：**  
+预编译的SQL缓存（poolPreparedStatements（PSCache））在当前会话的持有者中，且不被其他连接所共享。导致数据库内存不断增加。  
+该参数默认是关闭的，但有时从Oracle环境（一般会设置为打开）迁移时，需要显式指定关闭。  
+将`druid.poolPreparedStatements`值设置为false，且`druid.maxPoolPreparedStatementPerConnectionSize`值不设置或者设置为小于等于0。  
+
+-----  
+
+## 数据库压缩备份  
+数据库版本：ALL  
+操作系统：ALL  
+硬件平台：ALL  
+**描述：**  
+数据库如何进行压缩备份？  
+**解决方法：**  
+方法一：  
+1，在ONCONFIG配置文件中设置参数  
+```text
+BACKUP_FILTER /bin/gzip     # 调用操作系统压缩命令  
+RESTORE_FILTER /bin/gunzip  # 调用操作系统对应解压缩命令  
+LTAPESIZE 1024000000        # 如果需要逻辑日志备份，需要指定该大小（当BACKUP_FILTER配置时，LTAPESIZE不能是0（当然太小也不行））
+```
+2，正常执行备份恢复  
+```text
+ontape -s -L 0  
+ontape -r
+```  
+
+方法二：  
+1，正常执行备份  
+```text
+ontape -s -L 0  
+```
+2，使用操作系统命令压缩备份文件  
+```text
+gzip 主机名_0_L0
+```
+3，数据库恢复时，先解压再恢复  
+```text
+gunzip 主机名_0_L0.gz
+ontape -r
+```
+注：方法二可脚本实现  
+
+-----  
+
+## UTF8字符集库导入GBK编码的文本  
+数据库版本：ALL  
+操作系统：ALL  
+硬件平台：ALL  
+**描述：**  
+字符集utf8的库如何导入gbk编码/8859-1编码的文本文件？  
+**解决方法：**  
+方法一、  
+1，设置DB_LOCALE为utf8，CLIENT_LOCALE为GB18030-2000  
+2，在dbaccess中直接导入  
+
+方法二、  
+1，将文本文件转码，如使用iconv  
+```text
+iconv -f ISO-8859 -t UTF-8 inputfile -o outputfile
+```
+2，使用DB_LOCALE/CLIENT_LOCALE均为utf8导入  
+
+-----  
+
+## 如何判断表是在哪个模式下创建的？  
+数据库版本：3.5.x及更新的版本（支持SQLMODE=Oracle的版本）  
+操作系统：ALL  
+硬件平台：ALL  
+**描述：**  
+如何判断表是在哪个模式下创建的？  
+**解决方法：**  
+通过systables中的flags（SMALLINT类型）标识来判断：  
+用于对永久表分类的代码：  
+
+|类型|值|16进制值|说明|
+|:---|:---|:---|:---|
+|STANDARD|0|0x0|标准表|
+|ROWID|1|0x1|已定义行标识列|
+|UNDER|2|0x2|在超表之下创建的表|
+|VIEWREMOTE|4|0x4|视图基于远程表|
+|CDR|8|0x8|已定义 CDRCOLS|
+|RAW|16|0x10|RAW 表|
+|EXTERNAL|32|0x20|外部表|
+|AUDIT|64|0x40|审计表属性 - FGA|
+|AQT|128|0x80|视图是用于卸载 DWA 的 AQT|
+|VIRTAQT|256|0x100|视图是虚拟 AQT|
+|ORAMODE|16384|0x4000|Oracle模式下表|
+
+需要注意的是，该值应当使用bitand()来计算。  
+
+-----  
+
+## 导出正常，导入报-1264错误  
+数据库版本：3.5.x及更新的版本（支持SQLMODE=Oracle的版本）  
+操作系统：ALL  
+硬件平台：ALL  
+**描述：**  
+unload正常，load时报"1264: Extra characters at the end of a datetime or interval or timestamp with time zone." 错误  
+**解决方法：**  
+提示很明确，导入时的日期时间数据格式不匹配，应当是设置了GL_DATETIME环境变量。关闭GL_DATETIME环境变量再导出及导入即可。  
+注：dbexport/dbimport有同样的问题，请注意环境变量的差异。  
+
+-----  
+
+## PDO_GBASEDBT中大对象返回"resource(4) of type (stream)"  
+数据库版本：ALL  
+操作系统：ALL  
+硬件平台：ALL  
+**描述：**  
+PHP使用PDO_GBASEDBT访问数据库时，大对象（如text类型）返回的类型是resource(4) of type (stream)而不是string  
+**解决方法：**  
+连接属性中增加：  
+```php
+$dbh->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, true);   
+```
+
+----- 
+
+最后更新日期：2025-10-28  
