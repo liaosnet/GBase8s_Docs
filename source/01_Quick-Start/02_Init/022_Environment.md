@@ -1,6 +1,6 @@
 # 环境变量  
-本章将展示数据库安装后的环境变量信息，具体以安装生成值为准。
-如下一键安装方法配置的环境变量信息：
+本章将展示数据库安装后的环境变量信息，具体以安装生成值为准。  
+如下一键安装方法配置的环境变量信息：  
 ```text
 export GBASEDBTDIR=/opt/gbase
 export GBASEDBTSERVER=gbase01
@@ -16,7 +16,7 @@ export DBDATE="Y4MD-"
 export DBACCESS_SHOW_TIME=1
 ```
 
-具体描述如下：
+具体描述如下：  
 
 | **环境变量名称** | **环境变量说明信息** |
 | --- | --- |

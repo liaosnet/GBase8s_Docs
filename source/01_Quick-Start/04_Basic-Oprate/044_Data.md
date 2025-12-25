@@ -13,12 +13,12 @@ INSERT INTO company values(0,'coname2','coaddr2'),(0,'coname3','coaddr3');
 ## 查询数据  
 通过执行SELECT语句查询数据：  
 
-- 执行如下语句查询company表中所有数据
+- 执行如下语句查询company表中所有数据  
 ```sql  
 SELECT * FROM company;
 ```
 
-- 执行如下语句对company表进行条件查询：
+- 执行如下语句对company表进行条件查询：  
 ```sql  
 SELECT * FROM company WHERE coid = 3;
 ```

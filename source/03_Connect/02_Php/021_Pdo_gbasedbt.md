@@ -30,8 +30,11 @@ PHP环境使用nginx+php-fpm，使用纯编译方式。
 
 [root@gbase_host01 php-7.4.33]# make -j 4
 ```
-**注：aarch64架构下，数组函数zif_array_sum编译错误，通过修改zend_operators.h文件中ZEND_USE_ASM_ARITHMETIC的值为0来解决**  
-bug地址： https://bugs.php.net/bug.php?id=81124  
+
+> **<font color="blue">注意</font>**  
+> **aarch64架构下，数组函数zif_array_sum编译错误，通过修改zend_operators.h文件中ZEND_USE_ASM_ARITHMETIC的值为0来解决**  
+> bug地址： https://bugs.php.net/bug.php?id=81124  
+
 ```text
 [root@gbase_host01 php-7.4.33]# vi Zend/zend_operators.h  
 ```
@@ -206,7 +209,6 @@ extension=pdo_gbasedbt.so
 编写测试代码pdo_gbasedbt.php，内容如下：  
 ```php
 <?php
-<?php
     header('Content-type:text/html;charset=utf-8');
     # 按实际修改地址、端口、用户及密码
     $dbh = new PDO("gbasedbt:HOST=192.168.0.212;SERV=13633;PROT=onsoctcp;SRVR=gbase01;DB=testdb;DLOC=zh_CN.utf8;CLOC=zh_CN.utf8","gbasedbt","GBase123$%");
@@ -238,7 +240,7 @@ extension=pdo_gbasedbt.so
     echo "<th>col2</th></tr>";
 
     foreach($rows as $row) {
-        # 需要使用大写字段名称（依据 PDO::ATTR_CASE）
+        # 默认需要使用大写字段名称（依据 PDO::ATTR_CASE），依据PDO::ATTR_CASE的值进行更改
         echo "<tr><td>$row[0]</td>";
         echo "<td>$row[COL2]</td></tr>" . "\n";
     }

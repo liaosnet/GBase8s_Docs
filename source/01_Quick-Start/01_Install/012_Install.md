@@ -99,4 +99,6 @@ Database selected.
 ```text
 [root@node2 ~]# systemctl status GBaseService_gbase01.service
 ```
-系统服务仅限单机使用！  
+
+> **<font color="blue">注意</font>**  
+> 系统服务仅限单机使用！  

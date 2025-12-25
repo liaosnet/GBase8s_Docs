@@ -368,7 +368,9 @@ Check the message log, online.log, for errors.
 **描述：**  
 执行ids_install时，报“java.lang.Error: java.io.FileNotFoundException: /tmp/install.dir.4858/Linux/resource/jre/jre/lib/tzdb.dat (没有那个文件或目录)”  
 **解决方法：**  
-tzdb.dat是一个链接文件，链接到 tzdb.dat -> /usr/share/javazi-1.8/tzdb.dat，若发现不存在这个目录和文件，可以创建链接至系统的tzdb.dat。如：mkdir -p /usr/share/javazi-1.8 && ln -s /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/tzdb.dat /usr/share/javazi-1.8/tzdb.dat。  
+tzdb.dat是一个链接文件，链接到 tzdb.dat -> /usr/share/javazi-1.8/tzdb.dat，若发现不存在这个目录和文件，可以创建链接至系统的tzdb.dat。  
+如：`mkdir -p /usr/share/javazi-1.8 && ln -s /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/tzdb.dat /usr/share/javazi-1.8/tzdb.dat`。  
+或者操作系统没有安装jdk，安装jdk(如openjdk1.8)即可。  
 
 -----  
 

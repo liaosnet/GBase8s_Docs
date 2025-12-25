@@ -13,9 +13,9 @@ EXECUTE FUNCTION task('create dbspace','datadbs02','/data/gbase/datachk02','1024
 EXECUTE FUNCTION admin('create dbspace','datadbs02','/data/gbase/datachk02','1024000','0','16');
 ```
 
-参数说明：创建dbspace，空间名称，空间使用的文件路径，大小（KB)，偏移量大小，使用的页大小（Linux下默认2KB，最大16KB，使用2KB的倍数)
+参数说明：创建dbspace，空间名称，空间使用的文件路径，大小（KB)，偏移量大小，使用的页大小（Linux下默认2KB，最大16KB，使用2KB的倍数)  
 
-对应的管理命令方式
+对应的管理命令方式  
 
 - 使用gbasedbt用户，创建数据空间使用的文件，创建数据空间  
 
@@ -27,7 +27,7 @@ EXECUTE FUNCTION admin('create dbspace','datadbs02','/data/gbase/datachk02','102
 [gbasedbt@node2 ~]$ onspaces -c -d datadbs03 -p /data/gbase/datachk03 -o 0 -s 1024000 -k 16
 ```
 
-参数说明：-c 创建，-d 空间名称，-p 空间使用的文件路径，-o 偏移量大小，-s 大小（KB），-k 页大小
+参数说明：-c 创建，-d 空间名称，-p 空间使用的文件路径，-o 偏移量大小，-s 大小（KB），-k 页大小  
 
 ## 查看数据空间  
 查数据空间有两种方式，使用SQL方式和管理命令onstat 方式  
@@ -106,7 +106,7 @@ EXECUTE FUNCTION task('modify chunk extendable on', 8);
 EXECUTE FUNCTION task('modify chunk extend', 8, 512000);
 ```
 
-通过增加数据文件的方式进行扩展有两种方式，使用SQL管理API方式和管理命令onspaces方式
+通过增加数据文件的方式进行扩展有两种方式，使用SQL管理API方式和管理命令onspaces方式  
 
 - 使用gbasedbt用户，在sysadmin中执行add chunk语句增加数据空间：  
 
@@ -114,9 +114,9 @@ EXECUTE FUNCTION task('modify chunk extend', 8, 512000);
 EXECUTE FUNCTION task('add chunk','datadbs03','/data/gbase/datachk03_2','512000','0');
 ```
 
-参数说明：增加chunk，空间名称，空间使用的文件路径，大小（KB)，偏移量大小
+参数说明：增加chunk，空间名称，空间使用的文件路径，大小（KB)，偏移量大小  
 
-对应的管理命令方式
+对应的管理命令方式  
 
 - 使用gbasedbt用户，创建数据空间使用的文件，增加数据空间  
 
@@ -157,4 +157,6 @@ EXECUTE FUNCTION task('drop dbspace','datadbs02');
 [gbasedbt@node2 ~]$ onspaces -d datadbs03 -y
 ```
 
-参数说明：-d 删除空间/chunk，-p 空间使用的文件路径，-o 偏移量大小，-y 确认删除
+参数说明：-d 删除空间/chunk，-p 空间使用的文件路径，-o 偏移量大小，-y 确认删除  
+
+最后修改日期：2025-11-19  

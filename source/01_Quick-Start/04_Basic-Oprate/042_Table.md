@@ -61,7 +61,7 @@ ALTER TABLE company_1 MODIFY (copost int);
 ```
 
 ## 删除表  
-执行DROP TABLE语句删除表：
+执行DROP TABLE语句删除表：  
 ```sql
 DROP TABLE company_1;
 ```
