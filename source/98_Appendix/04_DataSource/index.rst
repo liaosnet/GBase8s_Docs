@@ -1,4 +1,4 @@
-附录
+连接池
 ================================
 .. meta::
    :description lang=cn:
@@ -7,12 +7,9 @@
       GBase,GBasedbt,GBase 8s,信创,国产数据库,国产,GBase 8t,8t,8s,oracle,informix数据库,oracle数据库,数据库,postgres,pg,mysql,mariadb,linux,shell,java,php,liaosnet,python,存储过程,函数,技术文档
 
 .. toctree::
-   :maxdepth: 2
-   :numbered:
+   :maxdepth: 1
    :titlesonly:
    
-   01_ReturnCode/index
-   02_Resource/index
-   03_ErrorCode/index
-   04_DataSource/index
-   09_Other/index
+   041_Druid
+   042_HikariCP
+   

@@ -17,3 +17,4 @@
    035_ErrCode_part5
    036_ErrCode_part6
    037_ErrCode_part7
+   03a_GciErrCode

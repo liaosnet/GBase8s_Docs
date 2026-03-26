@@ -8,7 +8,7 @@
 # import sphinx_pdj_theme
 
 project = 'GBase 8s数据库 技术文档'
-copyright = '2004 - 2025, GBASEDBT.COM'
+copyright = '2004 - 2026, GBASEDBT.COM'
 author = 'liaosnet'
 
 # -- General configuration ---------------------------------------------------

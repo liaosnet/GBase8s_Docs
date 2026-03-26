@@ -11,7 +11,10 @@
 
 ## 上传软件包  
 将软件包GBase8sV8.8_TL_3.6.3_3X2_1_x86.tar和一键安装脚本AutoInit_GBase8s_v1.4.15.tar上传至install目录中，请确认软件包是以.tar为后缀，如果是.7z后缀，需要使用7zip工具先解压。  
-解压一键安装脚本AutoInit_GBase8s_v1.4.15.tar，并查看解压后目录中所有文件，请将解压命令后的脚本包名称更改为实际使用的脚本包名称：  
+解压一键安装脚本AutoInit_GBase8s_v1.4.15.tar，并查看解压后目录中所有文件，请将解压命令后的脚本包名称更改为实际使用的脚本包名称： 
+> **<font color="blue">注意</font>**  
+> 自动化安装脚本即时更新！地址：https://gbasedbt.com/dl/AutoInit_GBase8s/latest/  
+
 ```text
 [root@node2 install]# tar -xf AutoInit_GBase8s_v1.4.15.tar
 

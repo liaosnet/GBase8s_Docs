@@ -1,4 +1,4 @@
-# GBase 8s数据库错误代码  
+# GBase 8s数据库错误代码（2）  
 第二部分  
 
 ## itoxmsg  
