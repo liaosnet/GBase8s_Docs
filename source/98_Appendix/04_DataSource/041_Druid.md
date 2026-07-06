@@ -75,6 +75,7 @@ spring.datasource.druid.validation-query=SELECT 1 FROM DUAL
 spring.datasource.druid.keep-alive=true
 # 申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。
 spring.datasource.druid.test-while-idle=true
+# 该参数视需要开启
 spring.datasource.druid.test-on-borrow=false
 # 申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
 spring.datasource.druid.test-on-return=false

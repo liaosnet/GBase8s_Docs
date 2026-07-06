@@ -21,7 +21,14 @@ CSDK安装包解压，以管理员身份运行installclientsdk.exe开始安装�
  
 完成安装  
 ![完成安装](../_static/02_Install/03_CSDK_Win/csdk_win_05.png "完成安装")  
- 
+
+## 用户环境变量  
+在 系统 -> 高级系统设置 -> 环境变量 -> 用户变量 或者 系统变量中 增加：  
+GBASEDBTDIR=D:\GBASE\GBase Client-SDK  
+GBASEDBTSERVER=gbase01  
+在PATH中增加：D:\GBASE\GBase Client-SDK\bin; D:\GBASE\GBase Client-SDK\lib;  
+![用户环境变量](../_static/02_Install/03_CSDK_Win/csdk_win_env.png "用户环境变量")  
+
 ## CSDK的配置  
 安装完成后，需要对客户端连接进行设置。在开始菜单里找到GBase Client-SDK 4.10(64-bit)目录，使用 管理员权限运行 打开Setnet32 程序  
 ![setnet32](../_static/02_Install/03_CSDK_Win/csdk_win_06.png "setnet32")  
@@ -71,3 +78,5 @@ Service Name：13633         数据库使用的端口号
 测试连接成功后，在环境（Environment）选项卡中，确认环境是否正确。  
 ![环境](../_static/02_Install/03_CSDK_Win/csdk_win_15.png "环境")    
  
+
+最后更新日期：2026-07-06  

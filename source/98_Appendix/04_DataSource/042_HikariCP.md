@@ -30,4 +30,4 @@ GBase 8s 数据库使用hikaricp连接池参数建议
 |keepaliveTime|保持连接活跃的检查间隔|120000|120000，小于 maxLifetime 和数据库超时|
 |validationTimeout|验证连接有效性最大时间|5000|5000|
 
-最后更新日期：2026-03-30  
+最后更新日期：2026-06-30  
