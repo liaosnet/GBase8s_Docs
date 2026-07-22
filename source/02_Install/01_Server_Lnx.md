@@ -103,11 +103,11 @@ firewall-cmd --reload
 如果缺少相应的，在有apt源或者yum源时，可直接安装。
 如，使用yum安装（CentOS内核）：  
 ```shell
-yum -y install unzip tar java-1.8.0-openjdk glibc-devel ncurses-libs libnsl libaio
+yum -y install unzip tar java-1.8.0-openjdk glibc-devel ncurses-libs ncurses-compat-libs libnsl libaio libxcrypt-compat tzdata-java 
 ```
 或者（debian内核）：  
 ```shell
-apt -y install unzip tar openjdk-8-jdk glibc-tools libncurses-dev libncurses5-dev libnsl-dev libaio-dev
+apt -y install unzip tar openjdk-8-jdk glibc-tools libncurses-dev libncurses5-dev libnsl-dev libaio-dev libcrypt1 tzdata-jav
 ```
 
 ## 数据库自定义安装  
@@ -691,3 +691,6 @@ address          number   flags    uniqid   begin                size     used  
 其中：  
 第一个语句中的第二个参数数字6为对应的chunk编号。  
 第二个语句中的第二个参数表示空间名称，第三个参数为创建大小（0-100之前表示百分比、大于1000表示KB），第四个参数为最小扩展大小，第五个参数为最大扩展到的大小（即最大限制）  
+
+
+最后更新时间：2026-07-22  
