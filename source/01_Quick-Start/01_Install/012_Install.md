@@ -10,25 +10,26 @@
 ```
 
 ## 上传软件包  
-将软件包GBase8sV8.8_TL_3.6.3_3X2_1_x86.tar和一键安装脚本AutoInit_GBase8s_v1.4.15.tar上传至install目录中，请确认软件包是以.tar为后缀，如果是.7z后缀，需要使用7zip工具先解压。  
-解压一键安装脚本AutoInit_GBase8s_v1.4.15.tar，并查看解压后目录中所有文件，请将解压命令后的脚本包名称更改为实际使用的脚本包名称： 
+将软件包GBase8sV8.8_3.6.5_2L1_1_5a649e_RHEL7_x86_64.tar和一键安装脚本AutoInit_GBase8s_v1.4.20.tar上传至install目录中，请确认软件包是以.tar为后缀，如果是.7z后缀，需要使用7zip工具先解压。  
+解压一键安装脚本AutoInit_GBase8s_v1.4.20.tar，并查看解压后目录中所有文件，请将解压命令后的脚本包名称更改为实际使用的脚本包名称： 
 > **<font color="blue">注意</font>**  
 > 自动化安装脚本即时更新！地址：https://gbasedbt.com/dl/AutoInit_GBase8s/latest/  
 
 ```text
-[root@node2 install]# tar -xf AutoInit_GBase8s_v1.4.15.tar
+[root@node2 install]# tar -xf AutoInit_GBase8s_v1.4.20.tar
 
 [root@node2 install]# ll
-总用量 338352
--rwxr-xr-x  1 liaosnet liaosnet     23537 Aug  5 16:27 AutoInit_GBase8s.sh
--rw-r--r--  1 root     root         51200 Aug  5 16:33 AutoInit_GBase8s_v1.4.15.tar
--rwxr-xr-x  1 liaosnet liaosnet      3352 Aug  5 16:27 BuildSystemd.sh
--rwxr-xr-x  1 liaosnet liaosnet      3344 Aug  5 16:27 CheckEnv.sh
--rwxr-xr-x  1 liaosnet liaosnet      1793 Aug  5 16:27 CleanAll.sh
--rw-r--r--  1 liaosnet liaosnet 350720000 Aug  5 16:18 GBase8sV8.8_AEE_3.6.3_3X2_1_783c8d_RHEL6_x86_64.tar
--rw-r--r--  1 liaosnet liaosnet      2253 Jul 30 11:04 HOW_TO_USE.txt
--rw-r--r--  1 liaosnet liaosnet      4214 Aug  5 16:28 README.txt
--rwxr-xr-x  1 liaosnet liaosnet      3397 Aug  5 16:27 autoOptimize.sh
+总用量 329440
+-rwxr-xr-x. 1 root root     36484 8月  13 16:44 AutoInit_GBase8s.sh
+-rwxr-xr-x. 1 root root      3397 8月  13 16:44 autoOptimize.sh
+-rwxr-xr-x. 1 root root      3926 8月  13 16:44 BuildSystemd.sh
+-rwxr-xr-x. 1 root root      3402 8月  13 16:44 CheckEnv.sh
+-rwxr-xr-x. 1 root root      1867 8月  13 16:44 CleanAll.sh
+-rw-r--r--. 1 root root       688 5月  22 09:04 F0000000-0173CF.ini
+-rw-r--r--. 1 root root 337274880 8月  13 16:44 GBase8sV8.8_3.6.5_2L1_10_1c64df_RHEL7_x86_64.tar
+-rw-r--r--. 1 root root      3717 8月  13 16:44 HOW_TO_USE.txt
+drwxr-xr-x. 4 root root       118 8月  13 16:48 install
+-rw-r--r--. 1 root root      5533 8月  13 16:44 README.txt
 ```
 
 ## 执行安装部署  
@@ -36,28 +37,37 @@
 ```text
 [root@node2 install]# bash AutoInit_GBase8s.sh -h
 Usage:
-    AutoInit_GBase8s.sh [-d path] [-i path] [-p path] [-s y|n] [-l locale] [-u user] [-o y|n]
+    AutoInit_GBase8s.sh [-d path] [-i path] [-p path] [-s size] [-l locale] [-u user] [-o y|n]
                         [-n servername] [-c num_of_cpu] [-m num_of_memory] [-t type_of_instance]
-                        [-a y|n]
+                        [-a y|n] [-H ipaddr]
+                        [-E ertype] [-T hactype] [-H1 primary_ipaddr] [-H2 secondary_ipaddr]
+                        [-MV]
 
-        -d path    The path of dbspace.
-        -i path    The path of install software.
-        -p path    The path of home path.
-        -s y|n     Value of dbspace is 1GB? Yes/No, default is N.
-        -u user    The user name for SYSDBA, gbasedbt/informix, default is gbasedbt
-        -l locale  DB_LOCALE/CLIENT_LOCALE/SERVER_LOCALE value.
-        -o y|n     Only install software? Yes/No, default is N.
-        -n NAME    Servername, default is gbase01.
-        -c NUM     Number of CPU use.
-        -m NUM     Number of MB Memory use.
-        -t TYPE    Type of instance will install, [small], if use this, ignore -c and -m.
-        -a y|n     Security need, default N.
+        -d  path     The path of dbspace, default is /data/gbase.
+        -i  path     The path of install software, default is /opt/gbase.
+        -p  path     The path of home path, default is /home/gbasedbt.
+        -s  size     The size of the path of dbspace, default is 10 (GB).
+        -u  user     The user name for SYSDBA, gbasedbt/informix, default is gbasedbt
+        -l  locale   DB_LOCALE/CLIENT_LOCALE/SERVER_LOCALE value, default is zh_CN.utf8.
+        -o  y|n      Only install software? Yes/No, default is N.
+        -n  NAME     Servername, default is gbase01.
+        -c  NUM      Number of CPU use.
+        -m  NUM      Number of MB Memory use.
+        -t  TYPE     Type of instance will install, [small], if use this, ignore -c and -m.
+        -a  y|n      Security need, default N.
+        -r  y|n      Index page logging need, default N.
+        -E  ERType   Type of ER, 0(NONE)/1(STD_PRI)/2(STD_SEC)/11(HAC_PRI)/12(HAC_SEC), default is 0(NONE).
+        -T  HACType  Type of hac cluster, PRI/SEC/STD, default is STD.
+        -H  ipaddr   Ipaddr for customer install, default is 0.0.0.0.
+        -H1 ipaddr   Ipaddr for primary server.
+        -H2 ipaddr   Ipaddr for secondary server.
+        -MV          Database version support MVCC.
 ```
 
 使用按自动配置（使用1G的数据文件），过程中自动安装依赖包（有互联网连接）、软件安装、初始化实例。  
 
 ```text
-[root@node2 install]# bash AutoInit_GBase8s.sh -s y
+[root@node2 install]# bash AutoInit_GBase8s.sh -s 10
 [2024-06-18 17:28:40] The SYSDBA user is: gbasedbt
 PING 1.2.4.8 (1.2.4.8) 56(84) bytes of data.
 64 bytes from 1.2.4.8: icmp_seq=1 ttl=128 time=29.4 ms

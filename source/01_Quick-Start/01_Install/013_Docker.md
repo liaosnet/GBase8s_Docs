@@ -3,18 +3,18 @@
 镜像基于CentOS 7.8系统构建  
 
 ## docker pull 方式  
-提交在dockerhub上的镜像，最新版本是3.6.3_3x2_1  
+提交在dockerhub上的镜像，最新版本是3652L11  
 直接docker pull即可  
 ```shell
-docker pull docker.io/liaosnet/gbase8s:v8.8_3633x21_csdk_x64
+docker pull docker.io/liaosnet/gbase8s:v8.8_3652L11_csdk_x64
 或者
-docker pull liaosnet/gbase8s:v8.8_3633x21_csdk_x64
+docker pull liaosnet/gbase8s:v8.8_3652L11_csdk_x64
 ```
 通过docker images查看当前的镜像  
 ```text
 [root@h01 ~]# docker images
 REPOSITORY         TAG                       IMAGE ID            CREATED       SIZE
-liaosnet/gbase8s   v8.8_3633x21_csdk_x64     b34d34fbe66e        1 weeks ago   720MB
+liaosnet/gbase8s   v8.8_3652L11_csdk_x64     465056d807b6        1 weeks ago   706MB
 ```
 
 ## 自构建镜像方式  
@@ -23,24 +23,24 @@ liaosnet/gbase8s   v8.8_3633x21_csdk_x64     b34d34fbe66e        1 weeks ago   7
 链接：https://pan.baidu.com/s/1RweIxOb8Zr8AGxQschKt_g?pwd=8kqo  
 提取码：8kqo  
 
-下载下来的文件名称为3633x21_csdk_x64_20250805.tar.gz  
+下载下来的文件名称为3652L11_csdk_x64_20260713.tar.gz  
 当前目录解压，并构建镜像  
 ```shell
-tar -zxvf 3633x21_csdk_x64_20250805.tar.gz   
+tar -zxvf 3652L11_csdk_x64_20260713.tar.gz   
 
-docker build -t liaosnet/gbase8s:v8.8_3633x21_x64 .
+docker build -t liaosnet/gbase8s:v8.8_3652L11_csdk_x64 .
 ```
 通过docker images查看当前的镜像  
 ```text
 [root@h01 ~]# docker images
 REPOSITORY         TAG                       IMAGE ID            CREATED       SIZE
-liaosnet/gbase8s   v8.8_3633x21_csdk_x64     b34d34fbe66e        1 weeks ago   720MB
+liaosnet/gbase8s   v8.8_3652L11_csdk_x64     465056d807b6        1 weeks ago   706MB
 ```
 
 ## 创建容器，运行GBase 8s  
 创建容器，并运行GBase 8s   
 ```shell
-docker run -d -p 19088:9088 \
+docker run -d -p 36521:9088 \
   --name node01 --hostname node01 \
   --privileged=true \
   -e SERVERNAME=gbase01 \
@@ -48,7 +48,7 @@ docker run -d -p 19088:9088 \
   -e CPUS=1 \
   -e MEMS=2048 \
   -v /data/docker:/opt/gbase/data \
-  liaosnet/gbase8s:v8.8_3633x21_csdk_x64
+  liaosnet/gbase8s:v8.8_3652L11_csdk_x64
 ```
 以上参数中：  
 端口9088为数据库使用的内部端口，需要在容器中映射，如使用19088端口    
@@ -61,7 +61,7 @@ MEMS对应的是限制容器中使用的内存总量： 2048 MB
 ```text
 [root@h01 docker]# docker ps -a
 CONTAINER ID        IMAGE                                    COMMAND                  CREATED             STATUS              PORTS                     NAMES
-98eb1d1998a9        liaosnet/gbase8s:v8.8_3633x21_csdk_x64   "docker_entrypoint.sh"   9 seconds ago       Up 7 seconds        0.0.0.0:19088->9088/tcp   node01
+98eb1d1998a9        liaosnet/gbase8s:v8.8_3652L11_csdk_x64   "docker_entrypoint.sh"   9 seconds ago       Up 7 seconds        0.0.0.0:36521->9088/tcp   node01
 ```
 
 ## 进入容器  
@@ -75,3 +75,5 @@ docker exec -it node01 bash
 su - gbasedbt
 ```
 即为GBase 8s在docker容器中的环境  
+
+最后更新日期：2026-08-14  
